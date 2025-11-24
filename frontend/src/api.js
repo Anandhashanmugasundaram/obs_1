@@ -1,4 +1,4 @@
-const BASE = "https://obs-p072.onrender.com/"
+const BASE = "https://obs-p072.onrender.com"
 
 export async function ingest(item) {
   const res = await fetch(`${BASE}/ingest`, {
