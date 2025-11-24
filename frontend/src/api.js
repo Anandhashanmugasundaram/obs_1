@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000';
+const BASE = "https://obs-p072.onrender.com/"
 
 export async function ingest(item) {
   const res = await fetch(`${BASE}/ingest`, {
