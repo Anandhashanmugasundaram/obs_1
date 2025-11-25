@@ -2,55 +2,69 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { generateMock, getAlerts } from '../api';
 
-export default function ServicesOverview(){
-  const [services, setServices] = useState(['payments','checkout','users']);
+export default function ServicesOverview() {
+  const [services, setServices] = useState(['payments', 'checkout', 'users']);
   const [alerts, setAlerts] = useState([]);
 
-  async function loadAlerts(){
+  async function loadAlerts() {
     const res = await getAlerts();
     setAlerts(res.alerts || []);
   }
 
-  useEffect(()=>{ loadAlerts(); }, []);
+  useEffect(() => { loadAlerts(); }, []);
 
-  function countAlertsFor(svc){
-    return alerts.filter(a=>a.service===svc).length;
+  function countAlertsFor(svc) {
+    return alerts.filter(a => a.service === svc).length;
   }
 
-  async function makeMock(){
+  async function makeMock() {
     await generateMock();
     await loadAlerts();
     alert('Mock data generated (1 hour). Refresh pages to see data.');
   }
 
   return (
-    <>
-      <div className="card">
-        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-          <div>
-            <h3>Services</h3>
-            <div className="small">Monitored services</div>
-          </div>
-          <div>
-            <button className="button" onClick={makeMock}>Generate Mock Data</button>
-          </div>
+    <div className="min-h-screen bg-black text-white p-6 space-y-6">
+
+      <div className="bg-gray-900 p-4 rounded-md flex justify-between items-center shadow-md">
+        <div>
+          <h3 className="text-xl font-semibold">Services</h3>
+          <div className="text-gray-400 text-sm">Monitored services</div>
         </div>
+        <button
+          onClick={makeMock}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        >
+          Generate Mock Data
+        </button>
       </div>
 
-      <div className="card">
+      <div className="bg-gray-900 p-4 rounded-md shadow-md space-y-4">
         {services.map(s => (
-          <div key={s} className="service-item">
+          <div
+            key={s}
+            className="flex justify-between items-center p-3 bg-gray-800 rounded"
+          >
             <div>
-              <div style={{fontWeight:700}}>{s}</div>
-              <div className="small">Health: <span className="badge">OK</span></div>
+              <div className="font-semibold">{s}</div>
+              <div className="text-gray-400 text-sm">
+                Health:{' '}
+                <span className="bg-green-600 px-2 py-1 rounded text-xs">OK</span>
+              </div>
             </div>
-            <div style={{display:'flex', alignItems:'center', gap:8}}>
-              <div className="small">{countAlertsFor(s)} active alerts</div>
-              <Link to={`/service/${s}`}><button className="button">Open</button></Link>
+
+            <div className="flex items-center gap-3">
+              <div className="text-gray-400 text-sm">{countAlertsFor(s)} active alerts</div>
+              <Link to={`/service/${s}`}>
+                <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                  Open
+                </button>
+              </Link>
             </div>
           </div>
         ))}
       </div>
-    </>
+
+    </div>
   );
 }

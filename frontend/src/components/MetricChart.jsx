@@ -6,15 +6,37 @@ Chart.register(...registerables);
 export default function MetricChart({ series, title }) {
   const data = {
     labels: series.map(s => new Date(s.timestamp).toLocaleTimeString()),
-    datasets: [{
-      label: title || 'value',
-      data: series.map(s => s.value)
-    }]
+    datasets: [
+      {
+        label: title || 'value',
+        data: series.map(s => s.value),
+        borderWidth: 2,
+        borderColor: '#3b82f6', // Tailwind blue-500
+        backgroundColor: 'rgba(59, 130, 246, 0.2)', // translucent fill
+        tension: 0.3, // smooth curves
+      }
+    ]
   };
-  const options = { maintainAspectRatio: false, scales: { x: { display: true }, y: { beginAtZero: false } } };
+
+  const options = {
+    maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { color: '#ddd' } },
+      y: { ticks: { color: '#ddd' }, beginAtZero: false }
+    },
+    plugins: {
+      legend: { labels: { color: '#fff' } },
+      tooltip: {
+        backgroundColor: '#1f2937', // gray-800
+        titleColor: '#fff',
+        bodyColor: '#fff'
+      }
+    }
+  };
+
   return (
-    <div style={{height:300}} className="card">
-      <h4>{title}</h4>
+    <div className="bg-gray-900 text-white p-4 rounded-lg shadow-md" style={{ height: 300 }}>
+      <h4 className="text-lg font-semibold mb-3">{title}</h4>
       <Line data={data} options={options} />
     </div>
   );

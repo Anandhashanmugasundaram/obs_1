@@ -8,7 +8,7 @@ import Header from './components/Header';
 
 export default function App(){
   return (
-    <div className="container">
+    <div>
       <Header />
       <Routes>
         <Route path="/" element={<ServicesOverview />} />
